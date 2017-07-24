@@ -44,9 +44,7 @@ window.onload = function() {
 }
 
 function game_over() {
-    flip = true;
     in_game = false;
-    Snk.draw_gameover();
     go.innerHTML = "Game Over! Press Space to Restart!";
 }
 

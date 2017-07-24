@@ -26,8 +26,6 @@ var Snake = function(size, border, points) {
     this.player_score = 0;
     this.points_increase = points;
 
-    this.flip = false;
-
     return this;
 };
 
