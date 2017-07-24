@@ -1,6 +1,5 @@
 var canvas, context, score, hs;
-var fps = 10;
-
+var fps = 60;
 // colemak left: 65, up: 87, right: 83, down: 82
 // qwerty: left: 65, up: 87, right: 68, down: 83
 // arrow keys: left: 37, up: 38, right: 39, down: 40
@@ -41,10 +40,30 @@ window.onload = function() {
     setInterval(function() {
         draw_all();
         if (in_game) {
-            move_all();
+            console.log(timer.can_move(6));
+            if (timer.can_move(6)) {
+                move_all();
+            }
             all_collision(Snk, Mp, Apl);
         }
+        timer.increment();
     }, 1000/fps);
+}
+
+var timer  = {
+    time: 0,
+    increment: function() {
+        this.time++;
+        if (this.time == 60 || !in_game) {
+            this.reset();
+        }
+    },
+    reset: function() {
+        this.time = 0;
+    },
+    can_move: function(mod) {
+        return this.time % mod == 0;
+    }
 }
 
 function game_over() {
