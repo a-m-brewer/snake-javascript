@@ -1,11 +1,15 @@
 var canvas, context, score, hs;
 var fps = 10;
 
+// colemak left: 65, up: 87, right: 83, down: 82
+// qwerty: left: 65, up: 87, right: 68, down: 83
+// arrow keys: left: 37, up: 38, right: 39, down: 40
+
 const APPLE_GET_POINTS = 100;
-const KEY_LEFT = 65;
-const KEY_UP = 87;
-const KEY_RIGHT = 83;
-const KEY_DOWN = 82;
+const KEY_LEFT = 37;
+const KEY_UP = 38;
+const KEY_RIGHT = 39;
+const KEY_DOWN = 40;
 
 const BLOCK_SIZE = 20;
 const BORDER = 2;
