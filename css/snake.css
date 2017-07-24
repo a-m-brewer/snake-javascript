@@ -1,0 +1,28 @@
+#game_wrapper {
+    width: 400px;
+    overflow: auto;
+    background-color: black;
+}
+
+#player_scores {
+    background-color: #545454;
+    height: 80px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #505050;
+    padding: 5px;
+    text-align: center;
+}
+
+#score {
+    float: left;
+    width: 50%;
+}
+
+#game_over {
+    text-align: center;
+}
+
+p {
+    font-family: "Impact", Charcoal, sans-serif;
+}
