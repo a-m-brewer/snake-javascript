@@ -67,10 +67,9 @@ Snake.prototype.draw = function() {
 };
 
 Snake.prototype.key_handler = function(evt) {
-    this.last_xy = [this.x, this.y];
-
     this.can_turn = this.legal_direction(evt.keyCode);
-    if (this.can_turn) {
+    this.no_back = this.back_into_self(evt.keyCode)
+    if (this.can_turn && this.no_back) {
         switch(evt.keyCode) {
             case this.control_up:
                 this.set_speed(0, -this.speed);
@@ -134,6 +133,33 @@ Snake.prototype.legal_direction = function(key) {
         if (this.cdirection == "down" && key == this.control_up)    {return false}
         if (this.cdirection == "left" && key == this.control_right) {return false}
         if (this.cdirection == "right" && key == this.control_left) {return false}
+    }
+    return true;
+};
+
+Snake.prototype.back_into_self = function(key) {
+    if (this.tail_length > 0) {
+        if(this.y == this.tail_y[this.tail_length-1]) {
+            if(this.x < this.tail_x[this.tail_length-1]) {
+                if(key == this.control_right) {
+                    return false;
+                }
+            } else {
+                if (key == this.control_left) {
+                    return false;
+                }
+            }
+        } else if (this.x == this.tail_x[this.tail_length-1]) {
+            if (this.y < this.tail_y[this.tail_length-1]) {
+                if (key == this.control_down) {
+                    return false;
+                }
+            } else {
+                if (key == this.control_up) {
+                    return false;
+                }
+            }
+        }
     }
     return true;
 };
