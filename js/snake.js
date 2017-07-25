@@ -67,6 +67,8 @@ Snake.prototype.draw = function() {
 };
 
 Snake.prototype.key_handler = function(evt) {
+    this.last_xy = [this.x, this.y];
+
     this.can_turn = this.legal_direction(evt.keyCode);
     if (this.can_turn) {
         switch(evt.keyCode) {

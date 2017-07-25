@@ -4,6 +4,7 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <link rel="stylesheet" type="text/css" href="css/snake.css">
+  <title>Snake!</title>
 </head>
 
   <body>
@@ -17,14 +18,21 @@
           <p id="high_score">High Score: 0</p>
           <p id="game_over"></p>
         </div>
+        <div id="controls">
+          <input id="wasd" type="button" value="WASD"/>
+          <input id="arrow" type="button" value="Arrow"/>
+          <input id="colemak" type="button" value="Colemak"/>
+        </div>
       </div>
     </div>
 
     <script src="js/graphics_common.js"></script>
+    <script src="js/audio.js"></script>
     <script src="js/snake.js"></script>
     <script src="js/apple.js"></script>
     <script src="js/map.js"></script>
     <script src="js/collision.js"></script>
+    <script src="js/timer.js"></script>
     <script src="js/main.js"></script>
 
 

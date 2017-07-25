@@ -1,9 +1,3 @@
-function all_collision(snake, map, apple) {
-    snake_hits_wall(snake, map);
-    snake_hits_apple(snake, map, apple);
-    snake_hits_self(snake, map);
-}
-
 function snake_hits_wall(snake, map) {
     var snake_pos = snake.col_row();
     var a_i = map.array_index_of_tile(snake_pos.x, snake_pos.y);
@@ -16,8 +10,9 @@ function snake_hits_wall(snake, map) {
 function snake_hits_apple(snake, map, apple) {
     var snake_pos = snake.col_row();
     var a_i = map.array_index_of_tile(snake_pos.x, snake_pos.y);    
-
+    var eat_sound = new Sounds();
     if(map.CURRENT_MAP[a_i] === map.APPLE.id) {
+        eat_sound.apple.play();
         map.CURRENT_MAP[a_i] = map.FLOOR.id;
         snake.increase_score();
         snake.tail_length++;

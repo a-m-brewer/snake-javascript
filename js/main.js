@@ -1,14 +1,11 @@
 var canvas, context, score, hs;
 var fps = 60;
-// colemak left: 65, up: 87, right: 83, down: 82
-// qwerty: left: 65, up: 87, right: 68, down: 83
-// arrow keys: left: 37, up: 38, right: 39, down: 40
 
 const APPLE_GET_POINTS = 100;
-const KEY_LEFT = 37;
-const KEY_UP = 38;
-const KEY_RIGHT = 39;
-const KEY_DOWN = 40;
+const KEY_LEFT = 65;
+const KEY_UP = 87;
+const KEY_RIGHT = 83;
+const KEY_DOWN = 82;
 
 const BLOCK_SIZE = 20;
 const BORDER = 2;
@@ -16,8 +13,10 @@ const BORDER = 2;
 var Snk = new Snake(BLOCK_SIZE, BORDER, APPLE_GET_POINTS);
 var Apl = new Apple(BLOCK_SIZE, BORDER);
 var Mp = new Map();
+var Gtimer = new Timer();
 
 var in_game = true;
+var flip = false;
 
 window.onload = function() {
     canvas = document.getElementById("snek");
@@ -26,10 +25,28 @@ window.onload = function() {
     hs = document.getElementById("high_score");
     go = document.getElementById("game_over");
 
+    var control_buttons = {
+        arrows: document.getElementById("arrow"),
+        wasd: document.getElementById("wasd"),
+        colemak: document.getElementById("colemak")
+    }
+
+    // arrow keys: left: 37, up: 38, right: 39, down: 40
+    control_buttons.arrows.onclick = function() {
+        Snk.input(38, 40, 37, 39);
+    }
+    // colemak up: 87, down: 82, left: 65, right: 83
+    control_buttons.colemak.onclick = function() {
+        Snk.input(87, 82, 65, 83);
+    }
+    // qwerty: left: 65, up: 87, right: 68, down: 83
+    control_buttons.wasd.onclick = function() {
+        Snk.input(87, 83, 65, 68);
+    }
+
     check_cookie("highscore");
 
     Snk.input(KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT);
-
     reset();
 
     document.addEventListener('keydown', function(evt) {
@@ -38,56 +55,49 @@ window.onload = function() {
 
     
     setInterval(function() {
-        draw_all();
+        game.draw_all();
         if (in_game) {
-            console.log(timer.can_move(6));
-            if (timer.can_move(6)) {
-                move_all();
+            if (Gtimer.modullo(6)) {
+                game.move_all();
             }
-            all_collision(Snk, Mp, Apl);
+            game.all_collision(Snk, Mp, Apl);
         }
-        timer.increment();
+        Gtimer.increment();
     }, 1000/fps);
 }
 
-var timer  = {
-    time: 0,
-    increment: function() {
-        this.time++;
-        if (this.time == 60 || !in_game) {
-            this.reset();
+var game = {
+    move_all: function() {
+        Snk.move();
+    },
+    draw_all: function() {
+        Mp.draw();
+        Snk.draw();
+        Apl.draw();
+        if (Gtimer.less_than(30) && !in_game) {
+            draw_block(Snk.x, Snk.y, Snk.size, '#99ff99', '#1aff1a', Snk.border);
         }
+        score.innerHTML = "Score: " + Snk.player_score;        
     },
-    reset: function() {
-        this.time = 0;
-    },
-    can_move: function(mod) {
-        return this.time % mod == 0;
+    all_collision: function(snake, map, apple) {
+        snake_hits_wall(snake, map);
+        snake_hits_apple(snake, map, apple);
+        snake_hits_self(snake, map);        
     }
 }
 
 function game_over() {
+    Gtimer.reset();
     in_game = false;
     go.innerHTML = "Game Over! Press Space to Restart!";
 }
 
-function move_all() {
-    Snk.move();
-}
-
-function draw_all() {
-    Mp.draw();
-    Snk.draw();
-    Apl.draw();
-    if(!in_game) {
-        draw_block(Snk.x, Snk.y, Snk.size, '#99ff99', '#1aff1a', Snk.border);
-    }
-    score.innerHTML = "Score: " + Snk.player_score;
-}
-
 function reset() {
     check_if_new_highscore();
-    go.innerHTML = "";
+    go.innerHTML = "Controls UP: " + String.fromCharCode(KEY_UP) + 
+                            " DOWN: " + String.fromCharCode(KEY_DOWN) +
+                            " LEFT: " + String.fromCharCode(KEY_LEFT) +
+                            " RIGHT: " + String.fromCharCode(KEY_RIGHT);
     Mp.reset(Mp.LEVEL_ONE);
     Snk.reset();
     Apl.random_index(Snk, Mp);
@@ -107,6 +117,8 @@ function check_if_new_highscore() {
         hs.innerHTML = "High Score: " + this_game_score;
     }
 }
+
+// COOKIE STUFF
 
 function update_highscore_cookie(score) {
     document.cookie = "highscore=" + score + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/";
@@ -138,4 +150,3 @@ function check_cookie() {
         hs.innerHTML = "High Score: 0";
     }
 }
-
