@@ -18,11 +18,13 @@
           <p id="high_score">High Score: 0</p>
           <p id="game_over"></p>
         </div>
-        <div id="controls">
-          <input id="wasd" type="button" value="WASD"/>
-          <input id="arrow" type="button" value="Arrow"/>
-          <input id="colemak" type="button" value="Colemak"/>
+        <center>
+        <div class="controls">
+          <input type="radio" name="controls" onclick="wasd_click()" id="wasd">WASD
+          <input type="radio" name="controls" onclick="arrow_click()" id="arrow">Arrow Keys
+          <input type="radio" name="controls" onclick="colemak_click()" id="colemak">Colemak WASD
         </div>
+        </center>
       </div>
     </div>
 
@@ -35,6 +37,23 @@
     <script src="js/timer.js"></script>
     <script src="js/main.js"></script>
 
+    <script>
+        document.getElementById('arrow').click();
 
+        function wasd_click() {
+            Snk.input(87, 83, 65, 68); 
+            document.getElementById('wasd').blur();        
+        }
+
+        function arrow_click() {
+            Snk.input(38, 40, 37, 39);
+            document.getElementById('arrow').blur();  
+        }
+
+        function colemak_click() {
+            Snk.input(87, 82, 65, 83);
+            document.getElementById('colemak').blur();  
+        }
+    </script>
   </body>
 </html>

@@ -25,28 +25,8 @@ window.onload = function() {
     hs = document.getElementById("high_score");
     go = document.getElementById("game_over");
 
-    var control_buttons = {
-        arrows: document.getElementById("arrow"),
-        wasd: document.getElementById("wasd"),
-        colemak: document.getElementById("colemak")
-    }
-
-    // arrow keys: left: 37, up: 38, right: 39, down: 40
-    control_buttons.arrows.onclick = function() {
-        Snk.input(38, 40, 37, 39);
-    }
-    // colemak up: 87, down: 82, left: 65, right: 83
-    control_buttons.colemak.onclick = function() {
-        Snk.input(87, 82, 65, 83);
-    }
-    // qwerty: left: 65, up: 87, right: 68, down: 83
-    control_buttons.wasd.onclick = function() {
-        Snk.input(87, 83, 65, 68);
-    }
-
     check_cookie("highscore");
 
-    Snk.input(KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT);
     reset();
 
     document.addEventListener('keydown', function(evt) {
@@ -94,10 +74,7 @@ function game_over() {
 
 function reset() {
     check_if_new_highscore();
-    go.innerHTML = "Controls UP: " + String.fromCharCode(KEY_UP) + 
-                            " DOWN: " + String.fromCharCode(KEY_DOWN) +
-                            " LEFT: " + String.fromCharCode(KEY_LEFT) +
-                            " RIGHT: " + String.fromCharCode(KEY_RIGHT);
+    go.innerHTML = "";
     Mp.reset(Mp.LEVEL_ONE);
     Snk.reset();
     Apl.random_index(Snk, Mp);
