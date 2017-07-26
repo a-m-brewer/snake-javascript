@@ -4,7 +4,9 @@ var Snake = function(size, border, points) {
     this.y;
     this.size = size;
     // direction the snake is traveling
-    this.direction = [];
+    this.direction_x = [];
+    this.direction_y = [];
+    this.direction = [0, 0];
     this.speed = size;
     // width and height of the snake itself
     this.border = border;
@@ -26,6 +28,8 @@ var Snake = function(size, border, points) {
     this.player_score = 0;
     this.points_increase = points;
 
+    this.last_key_code = -1;
+
     return this;
 };
 
@@ -39,7 +43,8 @@ Snake.prototype.set_position = function(x_pos, y_pos) {
 };
 
 Snake.prototype.set_speed = function(x_s, y_s) {
-    this.direction = [x_s, y_s];
+    this.direction_x.push(x_s);
+    this.direction_y.push(y_s);
 };
 
 Snake.prototype.move = function() {
@@ -53,6 +58,14 @@ Snake.prototype.move = function() {
     this.tail_col_row[this.tail_length-1] = this.col_row();
     this.tail_x[this.tail_length-1] = this.x;
     this.tail_y[this.tail_length-1] = this.y;
+
+    if (this.direction[0] == this.direction_x[0] && this.direction[1] == this.direction_y[0]) {
+        this.direction_x.shift();
+        this.direction_y.shift();
+    } else if (typeof this.direction_x[0] !== "undefined" && typeof this.direction_y[0] !== "undefined") {
+        this.direction[0] = this.direction_x.shift();
+        this.direction[1] = this.direction_y.shift();
+    }
 
     this.x += this.direction[0];
     this.y += this.direction[1];
@@ -68,7 +81,8 @@ Snake.prototype.draw = function() {
 
 Snake.prototype.key_handler = function(evt) {
     this.can_turn = this.legal_direction(evt.keyCode);
-    this.no_back = this.back_into_self(evt.keyCode)
+    this.no_back = this.back_into_self(evt.keyCode);
+
     if (this.can_turn && this.no_back) {
         switch(evt.keyCode) {
             case this.control_up:
@@ -93,6 +107,7 @@ Snake.prototype.key_handler = function(evt) {
                 break;                                
         }
     }
+    this.last_key_code = evt.keyCode;
 };
 
 Snake.prototype.input = function(up, down, left, right) {
@@ -110,7 +125,10 @@ Snake.prototype.col_row = function() {
 };
 
 Snake.prototype.reset = function() {
-    this.set_speed(0, 0);
+    this.direction[0] = 0;
+    this.direction[1] = 0;
+    this.direction_x = [];
+    this.direction_y = [];
     this.player_score = 0;
     this.tail_length = 0;
     this.tail_x = [];
@@ -142,20 +160,32 @@ Snake.prototype.back_into_self = function(key) {
         if(this.y == this.tail_y[this.tail_length-1]) {
             if(this.x < this.tail_x[this.tail_length-1]) {
                 if(key == this.control_right) {
+                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                        this.set_speed(this.speed, 0);
+                    }
                     return false;
                 }
             } else {
                 if (key == this.control_left) {
+                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                        this.set_speed(-this.speed, 0);
+                    }
                     return false;
                 }
             }
         } else if (this.x == this.tail_x[this.tail_length-1]) {
             if (this.y < this.tail_y[this.tail_length-1]) {
                 if (key == this.control_down) {
+                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                        this.set_speed(0, this.speed);
+                    }
                     return false;
                 }
             } else {
                 if (key == this.control_up) {
+                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                        this.set_speed(0, -this.speed);
+                    }    
                     return false;
                 }
             }
