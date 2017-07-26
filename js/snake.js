@@ -176,14 +176,14 @@ Snake.prototype.back_into_self = function(key) {
         } else if (this.x == this.tail_x[this.tail_length-1]) {
             if (this.y < this.tail_y[this.tail_length-1]) {
                 if (key == this.control_down) {
-                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                    if (this.last_key_code == this.control_left || this.last_key_code == this.control_right) {
                         this.set_speed(0, this.speed);
                     }
                     return false;
                 }
             } else {
                 if (key == this.control_up) {
-                    if (this.last_key_code == this.control_up || this.last_key_code == this.control_down) {
+                    if (this.last_key_code == this.control_left || this.last_key_code == this.control_right) {
                         this.set_speed(0, -this.speed);
                     }    
                     return false;
