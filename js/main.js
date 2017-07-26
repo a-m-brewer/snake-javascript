@@ -37,6 +37,7 @@ window.onload = function() {
     setInterval(function() {
         game.draw_all();
         if (in_game) {
+            Snk.check_for_same();
             if (Gtimer.modullo(6)) {
                 game.move_all();
             }
